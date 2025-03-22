@@ -1,0 +1,8 @@
+apiVersion: v2
+name: helm-chromium
+version: 0.1.0
+description: A Helm chart for deploying a Selenium Chromium setup
+type: application
+maintainers:
+  - name: Bill Agee
+appVersion: "1.0.0"

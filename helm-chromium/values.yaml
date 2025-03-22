@@ -1,0 +1,32 @@
+replicaCount: 1
+
+image:
+  repository: selenium/standalone-chromium
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: NodePort
+  ports:
+    - name: "port-4444"
+      port: 4444
+      targetPort: 4444
+      protocol: TCP
+    - name: "port-5900"
+      port: 5900
+      targetPort: 5900
+      protocol: TCP
+    - name: "port-7900"
+      port: 7900
+      targetPort: 7900
+      protocol: TCP
+
+resources: {}
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+dnsConfig:
+  nameservers:
+    - 8.8.8.8
+

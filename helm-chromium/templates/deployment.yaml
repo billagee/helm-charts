@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-chromium
+  labels:
+    app: chromium
+    chart: {{ .Chart.Name }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: chromium
+  template:
+    metadata:
+      labels:
+        app: chromium
+    spec:
+      dnsPolicy: None
+      dnsConfig:
+        nameservers:
+{{- range .Values.dnsConfig.nameservers }}
+          - {{ . }}
+{{- end }}
+      containers:
+        - name: standalone-chromium
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+{{- range .Values.service.ports }}
+            - name: {{ .name }}
+              containerPort: {{ .targetPort }}
+              protocol: {{ .protocol }}
+{{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: shared-memory
+              mountPath: /dev/shm
+          stdin: true
+          tty: true
+      volumes:
+        - name: shared-memory
+          emptyDir:
+            medium: Memory
+
